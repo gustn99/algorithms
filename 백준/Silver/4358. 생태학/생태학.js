@@ -1,21 +1,28 @@
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./solving/input.txt";
-const input = require("fs").readFileSync(filePath).toString().split("\n");
+const filePath =
+  process.platform === "linux" ? "/dev/stdin" : "./solving/input.txt";
 
-// 입력의 마지막 빈 줄을 필터링
-const trees = input.filter(tree => tree.length > 0);
+const input = require("fs")
+  .readFileSync(filePath)
+  .toString()
+  .trim()
+  .split("\n");
 
-const hash = {};
-trees.forEach(tree => {
-  hash[tree] = (hash[tree] || 0) + 1;
-});
+const hash = input.reduce((acc, cur) => {
+  acc[cur] ? acc[cur]++ : (acc[cur] = 1);
+  return acc;
+}, {});
 
-const totalCount = trees.length;
-const sortedTreeNames = Object.keys(hash).sort();
+const totalCount = Object.values(hash).reduce((acc, cur) => acc + cur, 0);
 
-const result = sortedTreeNames.map(name => {
-  const count = hash[name];
-  const ratio = (count / totalCount) * 100;
-  return `${name} ${ratio.toFixed(4)}`;
-});
+const names = Object.keys(hash).sort();
+const result = names.reduce((acc, name) => {
+  const ratio = hash[name] / totalCount;
+  const perc = (ratio * 100).toFixed(4);
 
-console.log(result.join("\n"));
+  acc.push(`${name} ${perc}`);
+
+  return acc;
+}, []);
+
+const answer = result.join("\n");
+console.log(answer);
