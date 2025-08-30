@@ -19,10 +19,13 @@ const result = names.reduce((acc, name) => {
   const ratio = hash[name] / totalCount;
   const perc = (ratio * 100).toFixed(4);
 
-  acc.push(`${name} ${perc}`);
+  acc.push([name, perc]);
 
   return acc;
 }, []);
 
-const answer = result.join("\n");
+const answer = result
+  .sort((a, b) => a[0] - b[0])
+  .map(([name, perc]) => `${name} ${perc}`)
+  .join("\n");
 console.log(answer);
