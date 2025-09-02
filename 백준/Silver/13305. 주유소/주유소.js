@@ -13,31 +13,29 @@ const costArr = c
   .split(" ")
   .map(Number)
   .filter((_, i) => i < n - 1);
-const minCost = Math.min(...costArr);
 
-let chargedOil = 0;
-let leftDistance = distanceArr.reduce((acc, cur) => acc + cur, 0);
-let totalCost = 0;
-
+const groupedCost = [];
 for (let i = 0; i < n - 1; i++) {
+  const currentCost = costArr[i];
   const currentDistance = distanceArr[i];
 
-  if (distanceArr[i] < chargedOil) {
-    chargedOil -= currentDistance;
-    leftDistance -= currentDistance;
+  if (groupedCost.length === 0) {
+    groupedCost.push([currentCost, currentDistance]);
     continue;
   }
 
-  const currentCost = costArr[i];
-
-  if (currentCost > minCost) {
-    chargedOil += currentDistance;
-    leftDistance -= currentDistance;
-    totalCost += currentDistance * currentCost;
+  if (groupedCost.at(-1)[0] < currentCost) {
+    groupedCost.at(-1)[1] += currentDistance;
   } else {
-    totalCost += leftDistance * currentCost;
-    break;
+    groupedCost.push([currentCost, currentDistance]);
   }
+}
+
+let totalCost = 0;
+
+for (let i = 0; i < groupedCost.length; i++) {
+  const [cost, distance] = groupedCost[i];
+  totalCost += cost * distance;
 }
 
 console.log(totalCost);
