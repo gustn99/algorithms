@@ -8,10 +8,10 @@ const input = require("fs")
 
 const [n, d, c] = input;
 
-const distanceArr = d.split(" ").map(Number);
+const distanceArr = d.split(" ").map(BigInt);
 const costArr = c
   .split(" ")
-  .map(Number)
+  .map(BigInt)
   .filter((_, i) => i < n - 1);
 
 const groupedCost = [];
@@ -31,11 +31,11 @@ for (let i = 0; i < n - 1; i++) {
   }
 }
 
-let totalCost = 0;
+let totalCost = BigInt(0);
 
 for (let i = 0; i < groupedCost.length; i++) {
   const [cost, distance] = groupedCost[i];
   totalCost += cost * distance;
 }
 
-console.log(totalCost);
+console.log(totalCost.toString());
